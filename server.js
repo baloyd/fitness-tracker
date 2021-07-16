@@ -51,15 +51,15 @@ app.get("/api/workouts", (req, res) => {
 })
 
 //create workout
-app.post("/api/workouts", (req, res) =>{
-  db.Workout.create(req.body, (err,data) =>{
-    if(err) {
-      res.sendStatus(500);
-    }else{
-      res.json(data);
-    }
-  })
-})
+app.post("/api/workouts", async (req, res) => {
+  try {
+    const newWorkoutData = await Workout.create(req.body);
+    console.log(newWorkoutData);
+    res.status(200).json(newWorkoutData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 //add to existing workout
 app.put("/api/workouts/:id", (req, res) =>{
@@ -76,6 +76,12 @@ app.put("/api/workouts/:id", (req, res) =>{
     res.json(err)
   })
 })
+
+//get workouts in range
+
+// app.get("/api/workouts/range", (req, res) =>{
+
+// })
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);

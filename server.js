@@ -7,9 +7,6 @@ const Workout = require("./models/workout.js");
 
 const PORT = process.env.PORT || 3000;
 
-
-const { db } = require("./models/workout.js");
-
 const app = express();
 
 app.use(logger("dev"));
@@ -34,21 +31,23 @@ app.get('/stats', (req, res) => res.sendFile(path.join(__dirname, '/public/stats
 
 //get workouts
 app.get("/api/workouts", (req, res) => {
-  db.Workout.find({}, (err, data) =>{
-    dbWorkout.forEach(workout =>{
-      var total=0;
-      workout.exercises.forEach(e =>{
-        total += e.duration;
-      });
-      workout.totalDuration = total;
+
+  Workout.find({}).then(workoutData => {
+    workoutData.forEach(workout => {
+        var total = 0;
+        workout.exercises.forEach(e => {
+            total += e.duration;
+        });
+        workout.totalDuration = total;
+
     });
-    if(err) {
-      res.sendStatus(500);
-    }else {
-      res.json(data)
-    }
-  })
-})
+
+    res.json(workoutData);
+}).catch(err => {
+    res.json(err);
+});
+});
+
 
 //create workout
 app.post("/api/workouts", async (req, res) => {
@@ -63,15 +62,15 @@ app.post("/api/workouts", async (req, res) => {
 
 //add to existing workout
 app.put("/api/workouts/:id", (req, res) =>{
-  db.Workout.findOneAndUpdate(
+ Workout.findByIdAndUpdate(
     {_id: req.params.id},
     {
       $inc: {totalDuration: req.body.duration},
       $push: {exercises:req.body}
     },
     {new:true}
-  ).then(dbWorkout =>{
-    res.json(dbWorkout);
+  ).then(workoutData =>{
+    res.json(workoutData);
   }).catch(err =>{
     res.json(err)
   })

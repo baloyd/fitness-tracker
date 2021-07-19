@@ -30,23 +30,18 @@ app.get('/stats', (req, res) => res.sendFile(path.join(__dirname, '/public/stats
 //api routes
 
 //get workouts
-app.get("/api/workouts", (req, res) => {
+app.get("/api/workouts", async (req, res) => {
+try{
+ const workoutData = await Workout.find({}, (err,data) =>{
+  
+ }) 
+ res.status(200).json(workoutData)
+} catch (err){
+  res.status(500).json(err)
 
-  Workout.find({}).then(workoutData => {
-    workoutData.forEach(workout => {
-        var total = 0;
-        workout.exercises.forEach(e => {
-            total += e.duration;
-        });
-        workout.totalDuration = total;
+}
+})
 
-    });
-
-    res.json(workoutData);
-}).catch(err => {
-    res.json(err);
-});
-});
 
 
 //create workout
@@ -78,9 +73,19 @@ app.put("/api/workouts/:id", (req, res) =>{
 
 //get workouts in range
 
-// app.get("/api/workouts/range", (req, res) =>{
+// app.get("/api/workouts/range", (req, res) => {
 
-// })
+//   Workout.find({}).then(dbWorkout => {
+//       console.log("ALL WORKOUTS");
+//       console.log(dbWorkout);
+
+//       res.json(dbWorkout);
+//   }).catch(err => {
+//       res.json(err);
+//   });
+
+// });
+
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);

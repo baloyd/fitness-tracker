@@ -32,14 +32,20 @@ app.get('/stats', (req, res) => res.sendFile(path.join(__dirname, '/public/stats
 //get workouts
 app.get("/api/workouts", async (req, res) => {
 try{
- const workoutData = await Workout.find({}, (err,data) =>{
+ const workoutData = await Workout.aggregate([
+   {
+     $addFields: {
+       totalDuration: {$sum: "$exercises.duration"}
+     }
   
- }) 
+ }
+]) 
  res.status(200).json(workoutData)
 } catch (err){
   res.status(500).json(err)
 
 }
+
 })
 
 

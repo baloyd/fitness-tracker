@@ -32,17 +32,15 @@ app.get('/stats', (req, res) => res.sendFile(path.join(__dirname, '/public/stats
 //get workouts
 app.get("/api/workouts", async (req, res) => {
 try{
- const workoutData = await Workout.aggregate([
-   {
-     $addFields: {
-       totalDuration: {$sum: "$exercises.duration"}
-     }
-  
+  const workouts=await Workout.find({}).sort({day:-1});
+  res.json(workouts.map(workout=>{
+    return {
+    ...workout.toObject(),
+    totalDuration:workout.exercises.reduce((total,exercise)=>total+exercise.duration,0)
  }
-]);
-console.log(workoutData);
- res.status(200).json(workoutData);
+ }));
 } catch (err){
+  console.log(err)
   res.status(500).json(err)
 
 }

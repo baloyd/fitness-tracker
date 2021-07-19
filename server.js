@@ -39,8 +39,9 @@ try{
      }
   
  }
-]) 
- res.status(200).json(workoutData)
+]);
+console.log(workoutData);
+ res.status(200).json(workoutData);
 } catch (err){
   res.status(500).json(err)
 
@@ -81,16 +82,7 @@ app.put("/api/workouts/:id", (req, res) =>{
 
 // app.get("/api/workouts/range", (req, res) => {
 
-//   Workout.find({}).then(dbWorkout => {
-//       console.log("ALL WORKOUTS");
-//       console.log(dbWorkout);
 
-//       res.json(dbWorkout);
-//   }).catch(err => {
-//       res.json(err);
-//   });
-
-// });
 
 
 app.listen(PORT, () => {

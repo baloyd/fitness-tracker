@@ -4,3 +4,5 @@ This project is a fitness tracker utilizing Mongoose as the relational database 
 On the stats page, the user can track their progress over the course of the past seven days, displaying in graph form the duration of each of their exercises for the week as well as the total weight combined.
 
 ![Screen Shot 2021-07-19 at 10 04 09 PM](https://user-images.githubusercontent.com/78614719/126251525-db83183d-7dbb-4ed2-bf96-c84f582d9b76.png)
+
+Link to the deployed app: https://evening-bayou-86840.herokuapp.com/

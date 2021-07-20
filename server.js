@@ -78,9 +78,24 @@ app.put("/api/workouts/:id", (req, res) =>{
 
 //get workouts in range
 
-// app.get("/api/workouts/range", (req, res) => {
+app.get("/api/workouts/range",async (req, res) => {
 
-
+  try{
+    const workouts=await Workout.find({}).sort({day:-1}).limit(7);
+    
+    res.json(workouts.map(workout=>{
+      return {
+      ...workout.toObject(),
+      totalDuration:workout.exercises.reduce((total,exercise)=>total+exercise.duration,0)
+   }
+   }));
+  } catch (err){
+    console.log(err)
+    res.status(500).json(err)
+  
+  }
+  
+  })
 
 
 app.listen(PORT, () => {
